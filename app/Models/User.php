@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;      // para activar la verificacion de email del middleware verified
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable // implements MustVerifyEmail   para activar la verificacion de email
 {
     use HasFactory, Notifiable;
 
@@ -37,11 +38,17 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    public function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
+    // Esgta funcion define la relacion de un usuario con multiples chirps
+    public function chirps(): HasMany
+        {
+            return $this->hasMany(Chirp::class);
+        }
+
 }
